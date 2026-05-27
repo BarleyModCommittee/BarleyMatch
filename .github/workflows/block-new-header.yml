@@ -1,0 +1,32 @@
+name: Block PRs with Added Header Files
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [ "Primary" ]
+
+jobs:
+  check-new-headers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get list of added header files
+        id: headers
+        run: |
+          # 获取 PR 的新增文件列表并筛选头文件
+          git fetch origin ${{ github.base_ref }}
+          ADDED=$(git diff --name-status origin/${{ github.base_ref }}...HEAD | grep "^A" | awk '{print $2}' | grep -E "\.(h|hpp)$" || true)
+          echo "added_headers=$ADDED" >> $GITHUB_OUTPUT
+
+      - name: Fail if new header files are added
+        run: |
+          if [ -n "${{ steps.headers.outputs.added_headers }}" ]; then
+            echo "❌ 新增了头文件，PR 不允许合并"
+            echo "${{ steps.headers.outputs.added_headers }}"
+            exit 1
+          else
+            echo "✅ 未新增头文件，检查通过"
+          fi

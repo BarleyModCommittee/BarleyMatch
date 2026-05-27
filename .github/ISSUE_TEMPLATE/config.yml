@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 询问
+    url: https://github.com/BarleyModCommittee/BarleyMatch/discussions
+    about: 若要询问其他内容，请在 Discussions 板块发贴，与社区成员沟通。

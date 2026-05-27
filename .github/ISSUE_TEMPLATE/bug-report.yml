@@ -1,0 +1,18 @@
+name: Bug 反馈
+description: 反馈 BarleyTest 套件使用中遇到的问题和漏洞
+title: "[Bug]: "
+labels: 'bug'
+type: bug
+
+body:
+  - type: markdown
+    attributes:
+      value: 感谢您抽出时间提交漏洞反馈！
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述
+      description: 详细描述你遇到的问题
+    validations:
+      required: true
