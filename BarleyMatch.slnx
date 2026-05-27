@@ -3,5 +3,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Project Path="AutoTest-Setup/AutoTest-Setup.vcxproj" Id="2f7bf25e-14e0-41b3-bae0-f13525cb67d6" />
   <Project Path="include/pvzclass/pvzclass/pvzclass.vcxproj" Id="703410a4-a7e7-4fff-a8d0-c7b8b5329575" />
 </Solution>
