@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(SolutionDir)include;$(SolutionDir)include\sol2\include;$(SolutionDir)lib\lua-5.4.0_Win32_vc16_lib\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib;$(LibraryPath);</LibraryPath>
     <PlatformToolset>v145</PlatformToolset>
   </PropertyGroup>
@@ -16,7 +16,7 @@
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)include\sol2\include;$(SolutionDir)lib\lua-5.4.0_Win32_vc16_lib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />
