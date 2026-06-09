@@ -2,6 +2,7 @@ export module MatchCycle;
 
 import index;
 import Util;
+import Global;
 import <fstream>;
 import <random>;
 
@@ -242,13 +243,17 @@ void MatchCycleInit()
 	row_input = ifstream(GetWorkingDirName("input.txt"));
 	result_output = ofstream(GetWorkingDirName("result.csv"));
 
-	row_input >> row_sum >> mode_flag >> row_per_round;
+	row_input >> row_sum >> mode_flag;
+	if (isPoolEnabled)
+	{
+		row_per_round = 6;
+		Const::SetLevelScene(PVZLevel::Vasebreaker_Endless, SceneType::Fog);
+	}
+	else
+		row_per_round = 5;
 
 	std::random_device device;
 	RndE = std::mt19937_64(device());
-
-	if (row_per_round == 6)
-		Const::SetLevelScene(PVZLevel::Vasebreaker_Endless, SceneType::Fog);
 
 	VaseBreakerPopulateEvent((int)RoundPreparation);
 	BoardUpdateGameEvent((int)RoundUpdate);

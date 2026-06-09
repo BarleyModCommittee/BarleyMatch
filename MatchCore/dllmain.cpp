@@ -19,9 +19,9 @@ BOOL __stdcall DllMain( HMODULE hModule,
     case DLL_PROCESS_ATTACH:
 		PVZ::Plant::MemSize = 0x160;
 		PVZ::Projectile::MemSize = 0x94;
+		LuaEnvInit();
         SetupEvents();
         MatchCycleInit();
-        LuaEnvInit();
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
     case DLL_PROCESS_DETACH:

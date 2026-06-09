@@ -30,5 +30,11 @@
     <ClCompile Include="Util.cppm">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="LuaEnv.cppm">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cppm">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

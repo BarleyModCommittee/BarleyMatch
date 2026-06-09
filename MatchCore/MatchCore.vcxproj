@@ -78,6 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Global.cppm" />
     <ClCompile Include="index.cppm" />
     <ClCompile Include="LuaEnv.cppm" />
     <ClCompile Include="MatchCycle.cppm" />

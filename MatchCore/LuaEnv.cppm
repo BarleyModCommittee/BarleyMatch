@@ -2,11 +2,13 @@ module;
 
 #define SOL_LUAJIT 1
 #include <sol/sol.hpp>
+#include <windows.h>
 
 export module LuaEnv;
 
 import index;
 import Util;
+import Global;
 
 export sol::state& GetLuaState();
 export void LuaEnvInit();
@@ -35,6 +37,18 @@ void LuaEnvInit()
 		sol::lib::debug,
 		sol::lib::io
 	);
+
+	std::string config_path = GetWorkingDirName("MatchConfig.lua");
+	lua.script_file(config_path);
+
+	sol::protected_function_result result = lua["isPoolEnabled"]();
+	if (!result.valid() || result.get_type() != sol::type::boolean)
+	{
+		sol::error err = result;
+		MessageBoxA(NULL, err.what(), "isPoolEnabled 存在异常", MB_ICONERROR);
+		ExitProcess(1);
+	}
+	isPoolEnabled = result.get<bool>();
 
 	lua_initialized = true;
 }
