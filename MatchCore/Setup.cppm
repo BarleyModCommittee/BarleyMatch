@@ -2,6 +2,7 @@ export module Setup;
 
 import index;
 import Util;
+import Global;
 
 export void SetupEvents();
 
@@ -36,17 +37,20 @@ void SetupEvents()
 
 	Creator::AsmInit();
 
-	DisableZombieFailHome();
+	if (isAutoMode)
+	{
+		DisableZombieFailHome();
 
-	EnableBackgroundRunning();
-	DisableAllSounds();
-	DisableNewParticle();
+		EnableBackgroundRunning();
+		DisableAllSounds();
+		DisableNewParticle();
 
-	DisableMusicInterfaceUpdate();
-	DisableMusicUpdate();
-	auto music = PVZ::GetMusic();
-	music.StopAllMusic();
-	music.Disabled = true;
+		DisableMusicInterfaceUpdate();
+		DisableMusicUpdate();
+		auto music = PVZ::GetMusic();
+		music.StopAllMusic();
+		music.Disabled = true;
+	}
 
 	PVZEvent::GameSelectorUpdateEvent((int)onGameSelectorUpdate);
 	ChallengeInitLevelAfterEvent((int)onChallengeInitLevelAfter);

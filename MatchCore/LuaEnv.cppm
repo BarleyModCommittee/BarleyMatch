@@ -50,5 +50,14 @@ void LuaEnvInit()
 	}
 	isPoolEnabled = result.get<bool>();
 
+	sol::protected_function_result result2 = lua["isAutoMode"]();
+	if (!result2.valid() || result2.get_type() != sol::type::boolean)
+	{
+		sol::error err = result2;
+		MessageBoxA(NULL, err.what(), "isAutoMode 存在异常", MB_ICONERROR);
+		ExitProcess(1);
+	}
+	isAutoMode = result2.get<bool>();
+
 	lua_initialized = true;
 }
