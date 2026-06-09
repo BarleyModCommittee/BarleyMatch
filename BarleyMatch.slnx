@@ -5,4 +5,8 @@
   </Configurations>
   <Project Path="AutoTest-Setup/AutoTest-Setup.vcxproj" Id="2f7bf25e-14e0-41b3-bae0-f13525cb67d6" />
   <Project Path="include/pvzclass/pvzclass/pvzclass.vcxproj" Id="703410a4-a7e7-4fff-a8d0-c7b8b5329575" />
+  <Project Path="MatchCore/MatchCore.vcxproj" Id="b0be4101-21b0-41bf-b568-c455357b5262">
+    <Platform Solution="Release|x64" Project="Win32" />
+    <Build Solution="Debug|x64" Project="false" />
+  </Project>
 </Solution>
