@@ -41,7 +41,7 @@ bool RoundPreparation(PVZ::Challenge challenge)
 	challenge.UpgradedRepeater = 0; // eliminated team count
 
 	Creator::ResetLawnmowers();
-	for (auto proj : board.GetAllProjectile())
+	for (auto proj : board.GetAllProjectiles())
 		proj.Remove();
 
 	if (completed == row_sum)
