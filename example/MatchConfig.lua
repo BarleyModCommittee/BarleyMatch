@@ -99,6 +99,6 @@ end
 
 -- 比赛结束回调
 function OnTerminate()
-    -- 记录最终波数
-    -- print("Match ended at wave: " .. wave_count)
+    -- 递增已完成对局数
+    Match.Round = Match.Round + 1
 end

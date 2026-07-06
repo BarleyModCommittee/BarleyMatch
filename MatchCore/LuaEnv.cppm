@@ -104,6 +104,14 @@ void LuaEnvInit()
 			PVZ::GetBoard().GetChallenge().LevelProcess = v;
 		}
 	);
+	ut["Round"] = sol::property(
+		[](MatchProxy&) -> int {
+			return PVZ::GetBoard().GetChallenge().Round;
+		},
+		[](MatchProxy&, int v) {
+			PVZ::GetBoard().GetChallenge().Round = v;
+		}
+	);
 	ut["RowsPerRound"] = sol::property(
 		[](MatchProxy&) -> int {
 			return row_per_round;
