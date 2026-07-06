@@ -4,14 +4,14 @@ import index;
 import Util;
 import Global;
 import MatchCycle;
+import MyEvent;
 
 export void SetupEvents();
 
-void onGameSelectorUpdate(PVZ::GameSelector selector)
+void onLoadEnd()
 {
 	auto app = PVZ::GetPVZApp();
-	app.KillGameSelector();
-	app.PreNewGame(PVZLevel::Vasebreaker_Endless, false);
+	app.FastLoad(PVZLevel::Vasebreaker_Endless);
 }
 
 void onChallengeInitLevelAfter(PVZ::Challenge challenge)
@@ -75,6 +75,6 @@ void SetupEvents()
 		BoardKeyDownEvent((int)onBoardKeyDown);
 
 	VaseBreakerPopulateEvent((int)onPopulate);
-	PVZEvent::GameSelectorUpdateEvent((int)onGameSelectorUpdate);
+	LoadEndEvent((int)onLoadEnd);
 	ChallengeInitLevelAfterEvent((int)onChallengeInitLevelAfter);
 }

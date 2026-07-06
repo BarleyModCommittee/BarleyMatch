@@ -82,6 +82,7 @@
     <ClCompile Include="index.cppm" />
     <ClCompile Include="LuaEnv.cppm" />
     <ClCompile Include="MatchCycle.cppm" />
+    <ClCompile Include="MyEvent.cppm" />
     <ClCompile Include="Setup.cppm" />
     <ClCompile Include="Util.cppm" />
   </ItemGroup>

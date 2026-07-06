@@ -36,5 +36,8 @@
     <ClCompile Include="Global.cppm">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="MyEvent.cppm">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
