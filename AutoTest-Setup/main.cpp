@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	for (string str : j.at("venv"))
 	{
 		::MultiByteToWideChar(0, 0, str.c_str(), -1, dir, str.size());
-		uint32_t pid = ProcessOpener::OpenByFilePath(dir, L"BarleyMod.exe");
+		uint32_t pid = ProcessOpener::OpenByFilePath(dir, L"PlantsVsZombies.exe");
 
 		PVZ::InitPVZNoLock(pid);
 		std::printf("%d\n", PVZ::Memory::Variable);
