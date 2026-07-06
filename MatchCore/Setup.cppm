@@ -28,6 +28,15 @@ void onChallengeInitLevelAfter(PVZ::Challenge challenge)
 			lawn.SetGridType(3, col, LawnType::Grass);
 		}
 	}
+	challenge.State = ChallengeState::BARLEYMATCH_IDLE;
+}
+
+bool onBoardKeyDown(PVZ::Board board, KeyCode::KeyCode code)
+{
+	auto widgetmgr = PVZ::GetWidgetManager();
+	if (code == 'K' && widgetmgr.IsKeyDown[KeyCode::SHIFT].get())
+		board.GetChallenge();
+	return true;
 }
 
 void SetupEvents()
@@ -51,6 +60,8 @@ void SetupEvents()
 		music.StopAllMusic();
 		music.Disabled = true;
 	}
+	else
+		BoardKeyDownEvent((int)onBoardKeyDown);
 
 	PVZEvent::GameSelectorUpdateEvent((int)onGameSelectorUpdate);
 	ChallengeInitLevelAfterEvent((int)onChallengeInitLevelAfter);
