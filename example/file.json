@@ -1,0 +1,7 @@
+{
+    "acceleration_factor": 250,
+    "draw_board": false,
+    "venv": [
+        "./"
+    ]
+}
