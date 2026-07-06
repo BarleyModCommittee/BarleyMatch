@@ -16,6 +16,7 @@ export void MatchStart()
 	auto challenge = board.GetChallenge();
 
 	board.PlayingTime = 0;
+	challenge.LevelProcess = 1;
 	challenge.ConveyorCountdown = 1;
 
 	Creator::ResetLawnmowers();
@@ -89,8 +90,11 @@ void UpdateZombieSpawn()
 void UpdateInMatch()
 {
 	auto challenge = PVZ::GetBoard().GetChallenge();
-	if (challenge.AttributeCountdown > 0)
-		challenge.AttributeCountdown--;
+	if (challenge.LevelProcess > 0)
+		challenge.LevelProcess--;
+	if (challenge.ConveyorCountdown > 0)
+		challenge.ConveyorCountdown--;
+
 	UpdateZombieSpawn();
 }
 
