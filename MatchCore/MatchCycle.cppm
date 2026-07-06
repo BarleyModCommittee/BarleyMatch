@@ -23,16 +23,14 @@ int mode_flag;
 /// @brief 每场对局的行数
 int row_per_round;
 
-/// @brief 回合开始
-bool RoundPreparation(PVZ::Challenge challenge)
+/// @brief 赛前准备
+void UpdatePreMatch(PVZ::Challenge challenge)
 {
-	challenge.State = ChallengeState::BARLEYMATCH_PREMATCH;
-
 	auto board = PVZ::GetBoard();
-	board.PlayingTime = 0; // game counter
-	challenge.AttributeCountdown = 0; // jalapeno counter
-	challenge.ConveyorCountdown = 1; // spawn zombie counter
-	challenge.UpgradedRepeater = 0; // eliminated team count
+	board.PlayingTime = 0;
+	challenge.AttributeCountdown = 0;
+	challenge.ConveyorCountdown = 1;
+	challenge.UpgradedRepeater = 0;
 
 	Creator::ResetLawnmowers();
 	for (auto proj : board.GetAllProjectiles())
@@ -40,22 +38,18 @@ bool RoundPreparation(PVZ::Challenge challenge)
 
 	if (completed == row_sum)
 	{
-		//result_output << dist.count() << std::endl;
 		int zero = 0;
 		row_sum = 1 / zero;
 	}
 
 	Creator::CreateVase(-3, -3, VaseContent::Sun);
-	
+
 	completed += row_per_round;
 	for (int row_index = 0; row_index < row_per_round; row_index++)
 		LuaCallSetupRow(row_index);
 
-	// for event
 	challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
-	return false;
 }
-
 /// @brief 生成辣椒并刷新倒计时
 /// @param rows_cnt 行数上限
 void SummonJalapeno(int rows_cnt)
@@ -96,35 +90,37 @@ void ResetZombieTimer()
 }
 
 static int zombie_rows[6] = { 0, 1, 2, 3, 4, 5 };
-/// @brief 对局更新
-void RoundUpdate(PVZ::Board board)
+
+/// @brief 检查超时并触发强制结束
+/// @return 是否超时
+bool CheckTimeout()
 {
-	board.FogBlownCountDown = 10000;
-
-	if (PVZ::GetPVZApp().GameState != PVZGameState::Playing)
-		return;
-
-	auto challenge = PVZ::GetBoard().GetChallenge();
-	if (challenge.State != ChallengeState::BARLEYMATCH_INMATCH)
-		return;
-
-	PVZ::Memory::WriteMemoryUnsafe(board.GetBaseAddress() + 0x5800, board.PlayingTime);
-
+	auto board = PVZ::GetBoard();
 	if (board.PlayingTime >= 50 * 60 * 100)
 	{
 		for (auto mower : board.GetAllLawnmowers())
 			mower.Start();
-		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
-		return;
+		return true;
 	}
+	return false;
+}
 
+/// @brief 更新辣椒救援倒计时
+void UpdateJalapenoRescue()
+{
+	auto challenge = PVZ::GetBoard().GetChallenge();
 	challenge.AttributeCountdown++;
 	if (challenge.AttributeCountdown == 1200)
 	{
 		challenge.AttributeCountdown = 0;
 		SummonJalapeno(row_per_round);
 	}
+}
 
+/// @brief 更新僵尸生成倒计时
+void UpdateZombieSpawn()
+{
+	auto challenge = PVZ::GetBoard().GetChallenge();
 	challenge.ConveyorCountdown--;
 	if (challenge.ConveyorCountdown == 0)
 	{
@@ -137,6 +133,41 @@ void RoundUpdate(PVZ::Board board)
 			auto zombie = Creator::CreateZombie(ZombieType::ConeheadZombie, zombie_rows[i], 10);
 			zombie.X = Creator::RandFloat(40) + 780.0f;
 		}
+	}
+}
+
+/// @brief 对战中状态更新
+void UpdateInMatch()
+{
+	auto board = PVZ::GetBoard();
+
+	if (CheckTimeout())
+	{
+		PVZ::GetBoard().GetChallenge().State = ChallengeState::BARLEYMATCH_AFTERMATCH;
+		return;
+	}
+
+	UpdateJalapenoRescue();
+	UpdateZombieSpawn();
+}
+
+/// @brief 对局更新
+void RoundUpdate(PVZ::Board board)
+{
+	board.FogBlownCountDown = 10000;
+
+	if (PVZ::GetPVZApp().GameState != PVZGameState::Playing)
+		return;
+
+	auto challenge = PVZ::GetBoard().GetChallenge();
+
+	switch (challenge.State)
+	{
+	case ChallengeState::BARLEYMATCH_PREMATCH:
+		UpdatePreMatch(challenge);
+		break;
+	case ChallengeState::BARLEYMATCH_INMATCH:
+		UpdateInMatch();
 	}
 }
 
@@ -192,7 +223,6 @@ void MatchCycleInit()
 	std::random_device device;
 	RndE = std::mt19937_64(device());
 
-	VaseBreakerPopulateEvent((int)RoundPreparation);
 	BoardUpdateGameEvent((int)RoundUpdate);
 	LawnmowerStartEvent((int)TeamEliminated);
 	PVZEvent::PuzzlePhaseCompleteBonusEvent_ts((int)RoundComplete);
