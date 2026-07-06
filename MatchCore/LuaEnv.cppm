@@ -14,6 +14,10 @@ static sol::state lua;
 static bool lua_initialized = false;
 
 export void LuaEnvInit();
+export void LuaCallOnMatchInit()
+{
+	lua["OnMatchInit"]();
+}
 export void LuaCallOnPreMatch()
 {
 	lua["OnPreMatch"]();

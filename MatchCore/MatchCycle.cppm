@@ -24,6 +24,8 @@ export void MatchStart()
 
 	challenge.AttributeCountdown = 1;
 	challenge.State = ChallengeState::BARLEYMATCH_PREMATCH;
+
+	LuaCallOnMatchInit();
 }
 
 int time_lim[] = { 6000, 12000, 18000, 24000, 30000, 36000, 42000, 60000, 66000, 72000,
