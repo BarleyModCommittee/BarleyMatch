@@ -118,6 +118,15 @@ void RoundUpdate(PVZ::Board board)
 		break;
 	case ChallengeState::BARLEYMATCH_INMATCH:
 		UpdateInMatch();
+		break;
+	case ChallengeState::BARLEYMATCH_AFTERMATCH:
+		if (challenge.AttributeCountdown > 0)
+		{
+			challenge.AttributeCountdown--;
+			if (challenge.AttributeCountdown == 0)
+				challenge.State = ChallengeState::BARLEYMATCH_IDLE;
+		}
+		break;
 	}
 }
 
