@@ -76,6 +76,11 @@ void LuaEnvInit()
 			PVZ::GetBoard().GetChallenge().ConveyorCountdown = v;
 		}
 	);
+	ut["RowsPerRound"] = sol::property(
+		[](MatchProxy&) -> int {
+			return row_per_round;
+		}
+	);
 	lua["Match"] = MatchProxy{};
 
 	std::string config_path = GetWorkingDirName("MatchConfig.lua");

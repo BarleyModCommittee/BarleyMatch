@@ -8,6 +8,9 @@ export bool isPoolEnabled = false;
 /// @brief 是否为自动对战模式
 export bool isAutoMode = false;
 
+/// @brief 每回合行数
+export int row_per_round;
+
 export namespace ChallengeState
 {
 	typedef ChallengeState Type2;

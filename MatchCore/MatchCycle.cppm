@@ -20,8 +20,6 @@ int row_sum;
 ///		1 表示“读入并忽略忽略第 21 列数值”（通常用于 21 列的数值为阵容分的情形）；\n
 ///		2 表示“额外输出被淘汰时的时间”
 int mode_flag;
-/// @brief 每场对局的行数
-int row_per_round;
 
 /// @brief 赛前准备
 void UpdatePreMatch(PVZ::Challenge challenge)
