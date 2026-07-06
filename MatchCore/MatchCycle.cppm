@@ -91,20 +91,6 @@ void ResetZombieTimer()
 
 static int zombie_rows[6] = { 0, 1, 2, 3, 4, 5 };
 
-/// @brief 检查超时并触发强制结束
-/// @return 是否超时
-bool CheckTimeout()
-{
-	auto board = PVZ::GetBoard();
-	if (board.PlayingTime >= 50 * 60 * 100)
-	{
-		for (auto mower : board.GetAllLawnmowers())
-			mower.Start();
-		return true;
-	}
-	return false;
-}
-
 /// @brief 更新辣椒救援倒计时
 void UpdateJalapenoRescue()
 {
@@ -139,14 +125,6 @@ void UpdateZombieSpawn()
 /// @brief 对战中状态更新
 void UpdateInMatch()
 {
-	auto board = PVZ::GetBoard();
-
-	if (CheckTimeout())
-	{
-		PVZ::GetBoard().GetChallenge().State = ChallengeState::BARLEYMATCH_AFTERMATCH;
-		return;
-	}
-
 	UpdateJalapenoRescue();
 	UpdateZombieSpawn();
 }
