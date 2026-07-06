@@ -10,15 +10,13 @@ import index;
 import Util;
 import Global;
 
-export sol::state& GetLuaState();
-export void LuaEnvInit();
-
 static sol::state lua;
 static bool lua_initialized = false;
 
-sol::state& GetLuaState()
+export void LuaEnvInit();
+export void LuaCallSetupRow(int row)
 {
-	return lua;
+	lua["SetupRowPlants"](row);
 }
 
 void LuaEnvInit()

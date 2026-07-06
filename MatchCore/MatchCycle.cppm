@@ -3,6 +3,7 @@ export module MatchCycle;
 import index;
 import Util;
 import Global;
+import LuaEnv;
 import <fstream>;
 import <random>;
 
@@ -21,9 +22,6 @@ int row_sum;
 int mode_flag;
 /// @brief 每场对局的行数
 int row_per_round;
-
-/// @brief 测试阵容表
-SeedType::SeedType tested_plants[6][20];
 
 /// @brief 回合开始
 bool RoundPreparation(PVZ::Challenge challenge)
@@ -51,8 +49,7 @@ bool RoundPreparation(PVZ::Challenge challenge)
 	
 	completed += row_per_round;
 	for (int row_index = 0; row_index < row_per_round; row_index++)
-	{
-	}
+		LuaCallSetupRow(row_index);
 
 	// for event
 	challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
