@@ -22,6 +22,10 @@ export void LuaCallOnPreMatch()
 {
 	lua["OnPreMatch"]();
 }
+export void LuaCallOnMatchUpdate()
+{
+	lua["OnMatchUpdate"]();
+}
 export void LuaCallOnTeamEliminated(int row)
 {
 	lua["OnTeamEliminated"](row);
@@ -46,6 +50,12 @@ void LuaEnvInit()
 
 	lua.set_function("CreatePlant", [](int type, int row, int column) {
 		return Creator::CreatePlant(static_cast<SeedType::SeedType>(type), row, column);
+	});
+
+	lua.set_function("CreateZombie", [](int type, int row, int column, float x) {
+		auto zombie = Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), row, column);
+		zombie.X = x;
+		return zombie;
 	});
 
 	lua.set_function("ClearPlants", []() {
@@ -82,6 +92,14 @@ void LuaEnvInit()
 		},
 		[](MatchProxy&, int v) {
 			PVZ::GetBoard().GetChallenge().ConveyorCountdown = v;
+		}
+	);
+	ut["TertiaryCounter"] = sol::property(
+		[](MatchProxy&) -> int {
+			return PVZ::GetBoard().GetChallenge().LevelProcess;
+		},
+		[](MatchProxy&, int v) {
+			PVZ::GetBoard().GetChallenge().LevelProcess = v;
 		}
 	);
 	ut["RowsPerRound"] = sol::property(
