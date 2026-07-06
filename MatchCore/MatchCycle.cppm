@@ -65,6 +65,10 @@ void RoundUpdate(PVZ::Board board)
 
 	switch (challenge.State)
 	{
+	case ChallengeState::BARLEYMATCH_IDLE:
+		if (isAutoMode)
+			MatchStart();
+		break;
 	case ChallengeState::BARLEYMATCH_PREMATCH:
 	{
 		LuaCallOnPreMatch();
@@ -84,11 +88,7 @@ void RoundUpdate(PVZ::Board board)
 		{
 			challenge.AttributeCountdown--;
 			if (challenge.AttributeCountdown == 0)
-			{
 				challenge.State = ChallengeState::BARLEYMATCH_IDLE;
-				if (isAutoMode)
-					MatchStart();
-			}
 		}
 		break;
 	}
