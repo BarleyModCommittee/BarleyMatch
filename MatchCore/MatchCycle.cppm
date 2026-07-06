@@ -21,6 +21,18 @@ export void MatchStart()
 	Creator::ResetLawnmowers();
 	for (auto proj : board.GetAllProjectiles())
 		proj.Remove();
+	for (auto plant : board.GetAllPlants())
+		plant.Remove();
+	for (auto zombie : board.GetAllZombies())
+		zombie.Remove();
+	for (auto coin : board.GetAllCoins())
+		coin.Die();
+	for (auto griditem : board.GetAllGriditems())
+	{
+		if (griditem.Row == -3 && griditem.Column == -3 && griditem.Type == GriditemType::Vase)
+			continue;
+		griditem.Remove();
+	}
 
 	challenge.AttributeCountdown = 1;
 	challenge.State = ChallengeState::BARLEYMATCH_PREMATCH;
