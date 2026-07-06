@@ -64,7 +64,9 @@ void LuaEnvInit()
 	});
 
 	lua.set_function("Terminate", []() {
-		PVZ::GetBoard().GetChallenge().State = ChallengeState::BARLEYMATCH_AFTERMATCH;
+		auto challenge = PVZ::GetBoard().GetChallenge();
+		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
+		challenge.AttributeCountdown = 1;
 		lua["OnTerminate"]();
 	});
 
