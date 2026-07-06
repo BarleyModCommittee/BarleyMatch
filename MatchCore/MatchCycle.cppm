@@ -34,6 +34,8 @@ SeedType::SeedType tested_plants[6][20];
 /// @brief 回合开始
 bool RoundPreparation(PVZ::Challenge challenge)
 {
+	challenge.State = ChallengeState::BARLEYMATCH_PREMATCH;
+
 	auto board = PVZ::GetBoard();
 	board.PlayingTime = 0; // game counter
 	challenge.AttributeCountdown = 0; // jalapeno counter
@@ -109,6 +111,7 @@ bool RoundPreparation(PVZ::Challenge challenge)
 			result_output << tested_plants[row_index][j] << ',';
 
 	// for event
+	challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
 	return false;
 }
 
@@ -160,16 +163,19 @@ void RoundUpdate(PVZ::Board board)
 	if (PVZ::GetPVZApp().GameState != PVZGameState::Playing)
 		return;
 
+	auto challenge = PVZ::GetBoard().GetChallenge();
+	if (challenge.State != ChallengeState::BARLEYMATCH_INMATCH)
+		return;
+
 	PVZ::Memory::WriteMemoryUnsafe(board.GetBaseAddress() + 0x5800, board.PlayingTime);
 
 	if (board.PlayingTime >= 50 * 60 * 100)
 	{
 		for (auto mower : board.GetAllLawnmowers())
 			mower.Start();
+		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
 		return;
 	}
-
-	auto challenge = PVZ::GetBoard().GetChallenge();
 
 	challenge.AttributeCountdown++;
 	if (challenge.AttributeCountdown == 1200)
@@ -207,6 +213,8 @@ void TeamEliminated(PVZ::LawnMower mower)
 
 	if (challenge.UpgradedRepeater == row_per_round)
 	{
+		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
+
 		auto vases = PVZ::GetBoard().GetAllGriditems<PVZ::Vase>();
 		for (auto vase : vases)
 			vase.Open();
