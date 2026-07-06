@@ -29,22 +29,63 @@ local zombie_pool = {
 local ZOMBIE_SPAWN_INTERVAL = 2500  -- 25秒 = 2500 cs（游戏时间单位）
 local GARGANTUAR_CHANCE = 0.002  -- 0.2% 概率生成巨人
 
--- 波数计数
-local wave_count = 0
-
 -- 淘汰队伍计数
 local eliminated_count = 0
 
+-- 波数计数
+local wave_count = 0
+
+-- 当前阵型记录（从列到行，45个数）
+local current_layout = {}
+
+-- 输出文件
+local result_file = nil
+
+-- 生成文件名（带时间戳）
+local function generate_filename()
+    local time = os.date("*t")
+    return string.format("result_%04d%02d%02d_%02d%02d%02d.csv",
+        time.year, time.month, time.day, time.hour, time.min, time.sec)
+end
+
+-- 初始化输出文件
+local function init_result_file()
+    if result_file == nil then
+        local filename = generate_filename()
+        result_file = io.open(filename, "w")
+        if result_file then
+            -- 写入表头
+            local header = {}
+            for col = 0, 8 do
+                for row = 0, 4 do
+                    table.insert(header, string.format("C%dR%d", col, row))
+                end
+            end
+            table.insert(header, "Waves")
+            result_file:write(table.concat(header, ",") .. "\n")
+        end
+    end
+end
+
 -- 初始化函数：随机生成植物阵型
 function OnMatchInit()
+    init_result_file()
+    
     local rows = Match.RowsPerRound
     local cols = 9  -- 9列
     
-    for row = 0, rows - 1 do
-        for col = 0, cols - 1 do
+    -- 清空当前阵型记录
+    current_layout = {}
+    
+    -- 从列到行生成植物
+    for col = 0, cols - 1 do
+        for row = 0, rows - 1 do
             -- 随机选择植物
             local plant_index = math.random(1, #plant_pool)
             local plant_type = plant_pool[plant_index]
+            
+            -- 记录到阵型
+            table.insert(current_layout, plant_type)
             
             -- 创建植物
             CreatePlant(plant_type, row, col)
@@ -99,6 +140,17 @@ end
 
 -- 比赛结束回调
 function OnTerminate()
+    -- 输出当前阵型和坚持轮数
+    if result_file then
+        local line = {}
+        for _, plant_type in ipairs(current_layout) do
+            table.insert(line, tostring(plant_type))
+        end
+        table.insert(line, tostring(wave_count))
+        result_file:write(table.concat(line, ",") .. "\n")
+        result_file:flush()
+    end
+    
     -- 递增已完成对局数
     Match.Round = Match.Round + 1
 end
