@@ -154,20 +154,6 @@ void TeamEliminated(PVZ::LawnMower mower)
 	LuaCallOnTeamEliminated(mower.Row);
 }
 
-/// @brief 对局结束
-bool RoundComplete(PVZ::Challenge challenge, int GridX, int GridY)
-{
-	auto mowers = PVZ::GetBoard().GetAllLawnmowers();
-	for (auto mower : mowers)
-		if (mower.State != LawnMowerState::Triggered)
-		{
-			break;
-		}
-
-	// for event
-	return false;
-}
-
 void MatchCycleInit()
 {
 	if (isPoolEnabled)
@@ -183,5 +169,4 @@ void MatchCycleInit()
 
 	BoardUpdateGameEvent((int)RoundUpdate);
 	LawnmowerStartEvent((int)TeamEliminated);
-	PVZEvent::PuzzlePhaseCompleteBonusEvent_ts((int)RoundComplete);
 }
