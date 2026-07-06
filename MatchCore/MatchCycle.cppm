@@ -8,12 +8,6 @@ import <random>;
 
 export void MatchCycleInit();
 
-using std::ifstream;
-using std::ofstream;
-
-ifstream row_input;
-ofstream result_output;
-
 std::mt19937_64 RndE;
 
 /// @brief 完成的对局行数
@@ -58,57 +52,7 @@ bool RoundPreparation(PVZ::Challenge challenge)
 	completed += row_per_round;
 	for (int row_index = 0; row_index < row_per_round; row_index++)
 	{
-		int tmp;
-		SeedType::SeedType type;
-		double nil;
-
-		// Standard
-		for (int i = 0; i < 5; i++)
-		{
-			row_input >> tmp;
-			type = SeedType::SeedType(tmp);
-			tested_plants[row_index][i] = type;
-			if (type >= 0)
-				Creator::CreatePlant(type, row_index, i);
-		}
-
-		// Pumpkin
-		for (int i = 0; i < 5; i++)
-		{
-			row_input >> tmp;
-			type = SeedType::SeedType(tmp);
-			tested_plants[row_index][i + 5] = type;
-			if (tmp == SeedType::Pumpkin || tmp == SeedType::Gloomshroom)
-				Creator::CreatePlant(type, row_index, i);
-		}
-
-		// Under
-		for (int i = 0; i < 5; i++)
-		{
-			row_input >> tmp;
-			type = SeedType::SeedType(tmp);
-			tested_plants[row_index][i + 10] = type;
-			if (type == SeedType::LilyPad || type == SeedType::FlowerPot)
-				Creator::CreatePlant(type, row_index, i);
-		}
-
-		// Float
-		for (int i = 0; i < 5; i++)
-		{
-			row_input >> tmp;
-			type = SeedType::SeedType(tmp);
-			tested_plants[row_index][i + 15] = type;
-			if (type == SeedType::CoffeeBean)
-				Creator::CreatePlant(type, row_index, i);
-		}
-
-		if (mode_flag & 1)
-			row_input >> nil;
 	}
-
-	for (int row_index = 0; row_index < row_per_round; row_index++)
-		for (int j = 0; j < 20; j++)
-			result_output << tested_plants[row_index][j] << ',';
 
 	// for event
 	challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
@@ -204,10 +148,6 @@ void TeamEliminated(PVZ::LawnMower mower)
 {
 	mower.State = LawnMowerState::Triggered;
 
-	result_output << mower.Row;
-	if (mode_flag & 2)
-		result_output << ',' << PVZ::GetBoard().PlayingTime;
-
 	auto challenge = PVZ::GetBoard().GetChallenge();
 	challenge.UpgradedRepeater++;
 
@@ -226,8 +166,6 @@ void TeamEliminated(PVZ::LawnMower mower)
 			.ret()
 		);
 	}
-	else
-		result_output << ',';
 }
 
 /// @brief 对局结束
@@ -237,10 +175,8 @@ bool RoundComplete(PVZ::Challenge challenge, int GridX, int GridY)
 	for (auto mower : mowers)
 		if (mower.State != LawnMowerState::Triggered)
 		{
-			result_output << ',' << mower.Row;
 			break;
 		}
-	result_output << std::endl;
 
 	// for event
 	return false;
@@ -248,10 +184,6 @@ bool RoundComplete(PVZ::Challenge challenge, int GridX, int GridY)
 
 void MatchCycleInit()
 {
-	row_input = ifstream(GetWorkingDirName("input.txt"));
-	result_output = ofstream(GetWorkingDirName("result.csv"));
-
-	row_input >> row_sum >> mode_flag;
 	if (isPoolEnabled)
 	{
 		row_per_round = 6;
