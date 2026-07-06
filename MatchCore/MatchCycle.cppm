@@ -7,44 +7,23 @@ import LuaEnv;
 import <fstream>;
 import <random>;
 
-export void MatchCycleInit();
-
 std::mt19937_64 RndE;
 
-/// @brief 完成的对局行数
-int completed = 0;
-
-/// @brief 总行数
-int row_sum;
-/// @brief 测试输出结果的标志位。\n
-///		1 表示“读入并忽略忽略第 21 列数值”（通常用于 21 列的数值为阵容分的情形）；\n
-///		2 表示“额外输出被淘汰时的时间”
-int mode_flag;
-
-/// @brief 赛前准备
-void UpdatePreMatch(PVZ::Challenge challenge)
+/// @brief 开始赛前准备
+export void MatchStart()
 {
 	auto board = PVZ::GetBoard();
+	auto challenge = board.GetChallenge();
+
 	board.PlayingTime = 0;
-	challenge.AttributeCountdown = 0;
 	challenge.ConveyorCountdown = 1;
-	challenge.UpgradedRepeater = 0;
 
 	Creator::ResetLawnmowers();
 	for (auto proj : board.GetAllProjectiles())
 		proj.Remove();
 
-	if (completed == row_sum)
-	{
-		int zero = 0;
-		row_sum = 1 / zero;
-	}
-
-	completed += row_per_round;
-	for (int row_index = 0; row_index < row_per_round; row_index++)
-		LuaCallSetupRow(row_index);
-
-	challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
+	challenge.AttributeCountdown = 1;
+	challenge.State = ChallengeState::BARLEYMATCH_PREMATCH;
 }
 
 int time_lim[] = { 6000, 12000, 18000, 24000, 30000, 36000, 42000, 60000, 66000, 72000,
@@ -114,7 +93,15 @@ void RoundUpdate(PVZ::Board board)
 	switch (challenge.State)
 	{
 	case ChallengeState::BARLEYMATCH_PREMATCH:
-		UpdatePreMatch(challenge);
+	{
+		LuaCallOnPreMatch();
+		if (challenge.AttributeCountdown > 0)
+		{
+			challenge.AttributeCountdown--;
+			if (challenge.AttributeCountdown == 0)
+				challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
+		}
+	}
 		break;
 	case ChallengeState::BARLEYMATCH_INMATCH:
 		UpdateInMatch();
@@ -137,7 +124,7 @@ void TeamEliminated(PVZ::LawnMower mower)
 	LuaCallOnTeamEliminated(mower.Row);
 }
 
-void MatchCycleInit()
+export void MatchCycleInit()
 {
 	if (isPoolEnabled)
 	{

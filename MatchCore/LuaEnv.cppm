@@ -14,9 +14,9 @@ static sol::state lua;
 static bool lua_initialized = false;
 
 export void LuaEnvInit();
-export void LuaCallSetupRow(int row)
+export void LuaCallOnPreMatch()
 {
-	lua["SetupRowPlants"](row);
+	lua["OnPreMatch"]();
 }
 export void LuaCallOnTeamEliminated(int row)
 {
