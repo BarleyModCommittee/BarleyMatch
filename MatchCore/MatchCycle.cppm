@@ -40,8 +40,6 @@ void UpdatePreMatch(PVZ::Challenge challenge)
 		row_sum = 1 / zero;
 	}
 
-	Creator::CreateVase(-3, -3, VaseContent::Sun);
-
 	completed += row_per_round;
 	for (int row_index = 0; row_index < row_per_round; row_index++)
 		LuaCallSetupRow(row_index);

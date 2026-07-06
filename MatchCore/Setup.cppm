@@ -3,6 +3,7 @@ export module Setup;
 import index;
 import Util;
 import Global;
+import MatchCycle;
 
 export void SetupEvents();
 
@@ -28,6 +29,7 @@ void onChallengeInitLevelAfter(PVZ::Challenge challenge)
 			lawn.SetGridType(3, col, LawnType::Grass);
 		}
 	}
+	Creator::CreateVase(-3, -3, VaseContent::Sun);
 	challenge.State = ChallengeState::BARLEYMATCH_IDLE;
 }
 
@@ -35,7 +37,11 @@ bool onBoardKeyDown(PVZ::Board board, KeyCode::KeyCode code)
 {
 	auto widgetmgr = PVZ::GetWidgetManager();
 	if (code == 'K' && widgetmgr.IsKeyDown[KeyCode::SHIFT].get())
-		board.GetChallenge();
+	{
+		auto challenge = board.GetChallenge();
+		if (challenge.State == ChallengeState::BARLEYMATCH_IDLE)
+			MatchStart();
+	}
 	return true;
 }
 
