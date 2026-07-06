@@ -48,20 +48,6 @@ void UpdatePreMatch(PVZ::Challenge challenge)
 
 	challenge.State = ChallengeState::BARLEYMATCH_INMATCH;
 }
-/// @brief 生成辣椒并刷新倒计时
-/// @param rows_cnt 行数上限
-void SummonJalapeno(int rows_cnt)
-{
-	bool hasLanwmower[6] = { false, false, false, false, false, false };
-	auto mowers = PVZ::GetBoard().GetAllLawnmowers();
-	for (int i = 0, lim = mowers.size(); i < lim; i++)
-		if (mowers[i].State == LawnMowerState::Ready)
-			hasLanwmower[mowers[i].Row] = true;
-
-	for (int i = 0; i < rows_cnt; i++)
-		if (!hasLanwmower[i])
-			Creator::CreatePlant(SeedType::Jalapeno, i, 15).DoSpecial();
-}
 
 int time_lim[] = { 6000, 12000, 18000, 24000, 30000, 36000, 42000, 60000, 66000, 72000,
 	78000, 84000, 90000, 96000, 102000, 108000, 114000, 120000, 126000, 132000,
@@ -89,18 +75,6 @@ void ResetZombieTimer()
 
 static int zombie_rows[6] = { 0, 1, 2, 3, 4, 5 };
 
-/// @brief 更新辣椒救援倒计时
-void UpdateJalapenoRescue()
-{
-	auto challenge = PVZ::GetBoard().GetChallenge();
-	challenge.AttributeCountdown++;
-	if (challenge.AttributeCountdown == 1200)
-	{
-		challenge.AttributeCountdown = 0;
-		SummonJalapeno(row_per_round);
-	}
-}
-
 /// @brief 更新僵尸生成倒计时
 void UpdateZombieSpawn()
 {
@@ -123,7 +97,9 @@ void UpdateZombieSpawn()
 /// @brief 对战中状态更新
 void UpdateInMatch()
 {
-	UpdateJalapenoRescue();
+	auto challenge = PVZ::GetBoard().GetChallenge();
+	if (challenge.AttributeCountdown > 0)
+		challenge.AttributeCountdown--;
 	UpdateZombieSpawn();
 }
 
