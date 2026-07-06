@@ -29,7 +29,6 @@ void onChallengeInitLevelAfter(PVZ::Challenge challenge)
 			lawn.SetGridType(3, col, LawnType::Grass);
 		}
 	}
-	Creator::CreateVase(-3, -3, VaseContent::Sun);
 	challenge.State = ChallengeState::BARLEYMATCH_IDLE;
 }
 
@@ -43,6 +42,12 @@ bool onBoardKeyDown(PVZ::Board board, KeyCode::KeyCode code)
 			MatchStart();
 	}
 	return true;
+}
+
+bool onPopulate()
+{
+	Creator::CreateVase(-3, -3, VaseContent::Sun);
+	return false;
 }
 
 void SetupEvents()
@@ -69,6 +74,7 @@ void SetupEvents()
 	else
 		BoardKeyDownEvent((int)onBoardKeyDown);
 
+	VaseBreakerPopulateEvent((int)onPopulate);
 	PVZEvent::GameSelectorUpdateEvent((int)onGameSelectorUpdate);
 	ChallengeInitLevelAfterEvent((int)onChallengeInitLevelAfter);
 }
