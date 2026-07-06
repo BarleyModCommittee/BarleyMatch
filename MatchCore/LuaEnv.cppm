@@ -18,6 +18,10 @@ export void LuaCallSetupRow(int row)
 {
 	lua["SetupRowPlants"](row);
 }
+export void LuaCallOnTeamEliminated(int row)
+{
+	lua["OnTeamEliminated"](row);
+}
 
 void LuaEnvInit()
 {

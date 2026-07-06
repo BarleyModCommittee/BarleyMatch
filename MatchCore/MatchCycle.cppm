@@ -151,25 +151,7 @@ void RoundUpdate(PVZ::Board board)
 void TeamEliminated(PVZ::LawnMower mower)
 {
 	mower.State = LawnMowerState::Triggered;
-
-	auto challenge = PVZ::GetBoard().GetChallenge();
-	challenge.UpgradedRepeater++;
-
-	if (challenge.UpgradedRepeater == row_per_round)
-	{
-		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
-
-		auto vases = PVZ::GetBoard().GetAllGriditems<PVZ::Vase>();
-		for (auto vase : vases)
-			vase.Open();
-		PVZ::Memory::Execute(AsmBuilder()
-			.push(0)
-			.mov_reg_imm(0, 0)
-			.mov_reg_imm(1, challenge.GetBaseAddress())
-			.invoke(0x429980)
-			.ret()
-		);
-	}
+	LuaCallOnTeamEliminated(mower.Row);
 }
 
 /// @brief 对局结束
