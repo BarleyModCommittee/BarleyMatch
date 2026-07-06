@@ -40,6 +40,11 @@ void LuaEnvInit()
 		return Creator::CreatePlant(static_cast<SeedType::SeedType>(type), row, column);
 	});
 
+	lua.set_function("ClearPlants", []() {
+		for (auto plant : PVZ::GetBoard().GetAllPlants())
+			plant.Remove();
+	});
+
 	std::string config_path = GetWorkingDirName("MatchConfig.lua");
 	lua.script_file(config_path);
 
