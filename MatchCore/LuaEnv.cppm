@@ -45,6 +45,18 @@ void LuaEnvInit()
 			plant.Remove();
 	});
 
+	struct MatchProxy {};
+	auto ut = lua.new_usertype<MatchProxy>("Match", sol::no_constructor);
+	ut["StateCountdown"] = sol::property(
+		[](MatchProxy&) -> int {
+			return PVZ::GetBoard().GetChallenge().AttributeCountdown;
+		},
+		[](MatchProxy&, int v) {
+			PVZ::GetBoard().GetChallenge().AttributeCountdown = v;
+		}
+	);
+	lua["Match"] = MatchProxy{};
+
 	std::string config_path = GetWorkingDirName("MatchConfig.lua");
 	lua.script_file(config_path);
 
