@@ -45,6 +45,11 @@ void LuaEnvInit()
 			plant.Remove();
 	});
 
+	lua.set_function("Terminate", []() {
+		PVZ::GetBoard().GetChallenge().State = ChallengeState::BARLEYMATCH_AFTERMATCH;
+		lua["OnTerminate"]();
+	});
+
 	struct MatchProxy {};
 	auto ut = lua.new_usertype<MatchProxy>("Match", sol::no_constructor);
 	ut["StateCountdown"] = sol::property(
@@ -53,6 +58,22 @@ void LuaEnvInit()
 		},
 		[](MatchProxy&, int v) {
 			PVZ::GetBoard().GetChallenge().AttributeCountdown = v;
+		}
+	);
+	ut["PrimaryCounter"] = sol::property(
+		[](MatchProxy&) -> int {
+			return PVZ::GetBoard().PlayingTime;
+		},
+		[](MatchProxy&, int v) {
+			PVZ::GetBoard().PlayingTime = v;
+		}
+	);
+	ut["SecondaryCounter"] = sol::property(
+		[](MatchProxy&) -> int {
+			return PVZ::GetBoard().GetChallenge().ConveyorCountdown;
+		},
+		[](MatchProxy&, int v) {
+			PVZ::GetBoard().GetChallenge().ConveyorCountdown = v;
 		}
 	);
 	lua["Match"] = MatchProxy{};
