@@ -38,6 +38,10 @@ void LuaEnvInit()
 		sol::lib::io
 	);
 
+	lua.set_function("CreatePlant", [](int type, int row, int column) {
+		return Creator::CreatePlant(static_cast<SeedType::SeedType>(type), row, column);
+	});
+
 	std::string config_path = GetWorkingDirName("MatchConfig.lua");
 	lua.script_file(config_path);
 
