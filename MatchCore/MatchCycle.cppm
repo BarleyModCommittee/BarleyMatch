@@ -84,7 +84,11 @@ void RoundUpdate(PVZ::Board board)
 		{
 			challenge.AttributeCountdown--;
 			if (challenge.AttributeCountdown == 0)
+			{
 				challenge.State = ChallengeState::BARLEYMATCH_IDLE;
+				if (isAutoMode)
+					MatchStart();
+			}
 		}
 		break;
 	}
