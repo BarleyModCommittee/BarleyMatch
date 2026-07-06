@@ -32,6 +32,9 @@ local GARGANTUAR_CHANCE = 0.002  -- 0.2% 概率生成巨人
 -- 波数计数
 local wave_count = 0
 
+-- 淘汰队伍计数
+local eliminated_count = 0
+
 -- 初始化函数：随机生成植物阵型
 function OnMatchInit()
     local rows = Match.RowsPerRound
@@ -51,6 +54,7 @@ function OnMatchInit()
     -- 初始化僵尸生成倒计时
     Match.SecondaryCounter = ZOMBIE_SPAWN_INTERVAL
     wave_count = 0
+    eliminated_count = 0
 end
 
 -- 赛前准备（每帧调用，可用于延迟开赛）
@@ -87,7 +91,10 @@ end
 
 -- 队伍被淘汰回调
 function OnTeamEliminated(row)
-    -- 记录淘汰信息
+    eliminated_count = eliminated_count + 1
+    if eliminated_count >= 5 then
+        Terminate()
+    end
 end
 
 -- 比赛结束回调
