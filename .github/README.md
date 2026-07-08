@@ -24,7 +24,51 @@ vcpkg install
 
 ## 使用方法
 
-### 1. 配置测试环境
+### 1. 放置配置文件
+
+将 `example` 目录下的配置文件复制到可执行文件所在目录：
+
+```
+YOUR_PVZ_DIR/
+├── AutoTest-Setup.exe          // 测试启动软件
+├── file.json                   // 测试配置文件
+├── lua51.dll                   // 测试内核的 Lua 依赖库
+├── MatchCore.dll               // 测试内核
+├── MatchConfig.lua             // 对局脚本
+└── PlantsVsZombies.exe         // PVZ 主程序
+```
+
+PVZ 主程序必须命名为 `PlantsVsZombies.exe` 。
+
+如果采用多文件夹分离方案，则 `MatchConfig.lua` 应分别放在存在 PVZ 主程序的各文件夹内，其余文件应放在上级目录：
+
+```
+WORK_DIR/
+├── AutoTest-Setup.exe
+├── file.json
+├── lua51.dll
+├── MatchCore.dll
+├── PVZ_1/
+│   ├── MatchConfig.lua
+│   └── PlantsVsZombies.exe
+├── PVZ_2/
+│   ├── MatchConfig.lua
+│   └── PlantsVsZombies.exe
+└── ...
+```
+
+`file.json` 的 `venv` 应列出各子文件夹的路径，支持相对路径：
+
+```json
+{
+    "venv": [
+        "./path/to/WORK_DIR/PVZ_1",
+        "./path/to/WORK_DIR/PVZ_2"
+    ]
+}
+```
+
+### 2. 配置测试环境
 
 按需修改 `MatchConfig.lua`，调整对局配置：
 
@@ -41,7 +85,7 @@ end
 -- 定义植物池、僵尸池等
 ```
 
-### 2. 配置加速参数
+### 3. 配置加速参数
 
 编辑 `file.json`，调整启动配置：
 
