@@ -63,6 +63,10 @@ void LuaEnvInit()
 			plant.Remove();
 	});
 
+	lua.set_function("HasZombie", []() {
+		return PVZ::GetBoard().ZombiesCount > 0;
+	});
+
 	lua.set_function("Terminate", []() {
 		auto challenge = PVZ::GetBoard().GetChallenge();
 		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;

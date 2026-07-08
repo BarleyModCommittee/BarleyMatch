@@ -92,6 +92,7 @@ end
 | `CreateZombie(type, row, column, x)` | 僵尸类型、行、列、X坐标 | 在指定位置创建僵尸 |
 | `ClearPlants()` | 无 | 清除场上所有植物 |
 | `Terminate()` | 无 | 终止当前对局，触发 `OnTerminate()` |
+| `HasZombie()` | 无 | `bool` | 判断场上是否有僵尸 |
 
 ### Match 属性
 
