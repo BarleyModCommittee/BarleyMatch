@@ -26,7 +26,7 @@ vcpkg install
 
 ### 1. 配置测试环境
 
-将 `example/MatchConfig.lua` 复制到工作目录，按需修改：
+按需修改 `MatchConfig.lua`，调整对局配置：
 
 ```lua
 -- 基础配置
@@ -43,7 +43,7 @@ end
 
 ### 2. 配置加速参数
 
-编辑 `example/file.json`：
+编辑 `file.json`，调整启动配置：
 
 ```json
 {
@@ -58,6 +58,7 @@ end
 1. 启动 PVZ 游戏
 2. 运行 `AutoTest-Setup` 注入测试模块
 3. 测试自动开始，结果由 Lua 脚本输出
+  - 若在手动模式下，则通过快捷键 `Shift + K` 开始一场对局。
 
 ## Lua API 参考
 
