@@ -163,5 +163,14 @@ void LuaEnvInit()
 	}
 	shouldDrawBoard = result4.get<bool>();
 
+	sol::protected_function_result result5 = lua["isIZMode"]();
+	if (!result5.valid() || result5.get_type() != sol::type::boolean)
+	{
+		sol::error err = result5;
+		MessageBoxA(NULL, err.what(), "isIZMode 存在异常", MB_ICONERROR);
+		ExitProcess(1);
+	}
+	isIZMode = result5.get<bool>();
+
 	lua_initialized = true;
 }

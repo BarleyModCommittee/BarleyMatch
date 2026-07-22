@@ -18,6 +18,10 @@ function shouldDrawBoard()
     return false  -- 是否绘制场景
 end
 
+function isIZMode()
+    return false  -- 是否为 IZ 模式
+end
+
 -- 植物池：所有图鉴植物（0-45），排除玉米加农炮(46)和模仿者(47)
 local plant_pool = {}
 for i = 0, 45 do

@@ -11,6 +11,9 @@ export bool isAutoMode = false;
 /// @brief 加速倍率
 export uint32_t accelerationFactor = 1;
 
+/// @brief 是否为 IZ 模式
+export bool isIZMode = false;
+
 /// @brief 是否绘制场景
 export bool shouldDrawBoard = true;
 
