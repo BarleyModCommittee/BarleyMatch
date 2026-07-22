@@ -122,6 +122,7 @@ end
 | `isAutoMode()` | `bool` | 是否为自动对战模式 |
 | `getAccelerationFactor()` | `number` | 加速倍率 |
 | `shouldDrawBoard()` | `bool` | 是否绘制场景 |
+| `isIZMode()` | `bool` | 是否为 IZ 模式 |
 
 ### 回调函数
 
@@ -132,7 +133,7 @@ end
 | `OnMatchInit()` | 无 | 对局初始化，用于布置植物阵型 |
 | `OnPreMatch()` | 无 | 赛前准备阶段每帧调用 |
 | `OnMatchUpdate()` | 无 | 比赛进行时每帧调用 |
-| `OnTeamEliminated(row)` | `row`: 被淘汰的行号 | 小推车触发时调用 |
+| `OnTeamEliminated(row)` | `row`: 被淘汰的行号 | 小推车触发（普通模式）或脑子被吃（IZ 模式）时调用 |
 | `OnTerminate(plant_won)` | `plant_won`: 植物方是否获胜 | 对局结束时调用 |
 
 ### 导出函数
@@ -143,6 +144,7 @@ end
 |------|------|------|
 | `CreatePlant(type, row, column)` | 植物类型、行、列 | 在指定位置创建植物 |
 | `CreateZombie(type, row, column, x)` | 僵尸类型、行、列、X坐标 | 在指定位置创建僵尸 |
+| `CreateIZBrain(row, column)` | 行、列（默认0） | 在指定位置创建 IZ 模式的脑子 |
 | `ClearPlants()` | 无 | 清除场上所有植物 |
 | `Terminate(plant_won)` | `plant_won`: 植物方是否获胜 | 终止当前对局，触发 `OnTerminate(plant_won)` |
 | `HasZombie()` | 无 | `bool` | 判断场上是否有僵尸 |
