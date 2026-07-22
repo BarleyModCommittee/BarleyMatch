@@ -144,5 +144,23 @@ void LuaEnvInit()
 	}
 	isAutoMode = result2.get<bool>();
 
+	sol::protected_function_result result3 = lua["getAccelerationFactor"]();
+	if (!result3.valid() || result3.get_type() != sol::type::number)
+	{
+		sol::error err = result3;
+		MessageBoxA(NULL, err.what(), "getAccelerationFactor 存在异常", MB_ICONERROR);
+		ExitProcess(1);
+	}
+	accelerationFactor = result3.get<uint32_t>();
+
+	sol::protected_function_result result4 = lua["shouldDrawBoard"]();
+	if (!result4.valid() || result4.get_type() != sol::type::boolean)
+	{
+		sol::error err = result4;
+		MessageBoxA(NULL, err.what(), "shouldDrawBoard 存在异常", MB_ICONERROR);
+		ExitProcess(1);
+	}
+	shouldDrawBoard = result4.get<bool>();
+
 	lua_initialized = true;
 }

@@ -8,6 +8,12 @@ export bool isPoolEnabled = false;
 /// @brief 是否为自动对战模式
 export bool isAutoMode = false;
 
+/// @brief 加速倍率
+export uint32_t accelerationFactor = 1;
+
+/// @brief 是否绘制场景
+export bool shouldDrawBoard = true;
+
 /// @brief 每回合行数
 export int row_per_round;
 

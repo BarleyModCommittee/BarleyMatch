@@ -28,9 +28,6 @@ int main(int argc, char* argv[])
 	json j;
 	config >> j;
 
-	uint32_t velocity = j.at("acceleration_factor");
-	bool draw_board = j.at("draw_board");
-
 	for (string str : j.at("venv"))
 	{
 		::MultiByteToWideChar(0, 0, str.c_str(), -1, dir, str.size());
@@ -39,12 +36,6 @@ int main(int argc, char* argv[])
 		PVZ::InitPVZNoLock(pid);
 		std::printf("%d\n", PVZ::Memory::Variable);
 		PVZ::Memory::immediateExecute = true;
-		PVZ::Memory::WriteMemory<uint32_t>(0x4526D3, velocity);
-		if (velocity > 1)
-			PVZ::Memory::WriteMemory<uint8_t>(0x6A9EAB, 1);
-
-		if (!draw_board)
-			DisableBoardDraw();
 
 		auto pos = (int*)(code + 1);
 		*pos = PVZ::Memory::Variable;

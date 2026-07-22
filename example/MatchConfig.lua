@@ -10,6 +10,14 @@ function isAutoMode()
     return true  -- 自动模式
 end
 
+function getAccelerationFactor()
+    return 250  -- 加速倍率
+end
+
+function shouldDrawBoard()
+    return false  -- 是否绘制场景
+end
+
 -- 植物池：所有图鉴植物（0-45），排除玉米加农炮(46)和模仿者(47)
 local plant_pool = {}
 for i = 0, 45 do

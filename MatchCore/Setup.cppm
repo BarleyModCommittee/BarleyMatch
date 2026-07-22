@@ -57,6 +57,12 @@ void SetupEvents()
 
 	Creator::AsmInit();
 
+	PVZ::Memory::WriteMemory<uint32_t>(0x4526D3, accelerationFactor);
+	if (accelerationFactor > 1)
+		PVZ::Memory::WriteMemory<uint8_t>(0x6A9EAB, 1);
+	if (!shouldDrawBoard)
+		DisableBoardDraw();
+
 	if (isAutoMode)
 	{
 		DisableZombieFailHome();

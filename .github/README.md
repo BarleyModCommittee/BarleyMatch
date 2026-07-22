@@ -57,17 +57,6 @@ WORK_DIR/
 └── ...
 ```
 
-`file.json` 的 `venv` 应列出各子文件夹的路径，支持相对路径：
-
-```json
-{
-    "venv": [
-        "./path/to/WORK_DIR/PVZ_1",
-        "./path/to/WORK_DIR/PVZ_2"
-    ]
-}
-```
-
 ### 2. 配置测试环境
 
 按需修改 `MatchConfig.lua`，调整对局配置：
@@ -82,22 +71,39 @@ function isAutoMode()
     return true  -- 是否自动模式
 end
 
+function getAccelerationFactor()
+    return 250  -- 加速倍率
+end
+
+function shouldDrawBoard()
+    return false  -- 是否绘制场景
+end
+
 -- 定义植物池、僵尸池等
 ```
 
-### 3. 配置加速参数
+### 3. 配置启动路径
 
-编辑 `file.json`，调整启动配置：
+编辑 `file.json`，设置各 PVZ 实例的路径：
 
 ```json
 {
-    "acceleration_factor": 250,  // 加速倍率
-    "draw_board": false,         // 是否绘制场景
     "venv": ["PVZ安装路径"]
 }
 ```
 
-### 3. 运行测试
+多实例时列出所有子文件夹路径，支持相对路径：
+
+```json
+{
+    "venv": [
+        "./path/to/WORK_DIR/PVZ_1",
+        "./path/to/WORK_DIR/PVZ_2"
+    ]
+}
+```
+
+### 4. 运行测试
 
 1. 启动 PVZ 游戏
 2. 运行 `AutoTest-Setup` 注入测试模块
@@ -114,6 +120,8 @@ end
 |------|--------|------|
 | `isPoolEnabled()` | `bool` | 是否启用泳池（true=6行，false=5行） |
 | `isAutoMode()` | `bool` | 是否为自动对战模式 |
+| `getAccelerationFactor()` | `number` | 加速倍率 |
+| `shouldDrawBoard()` | `bool` | 是否绘制场景 |
 
 ### 回调函数
 
