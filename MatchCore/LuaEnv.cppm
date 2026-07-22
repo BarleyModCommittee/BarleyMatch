@@ -67,11 +67,12 @@ void LuaEnvInit()
 		return PVZ::GetBoard().ZombiesCount > 0;
 	});
 
-	lua.set_function("Terminate", []() {
+	lua.set_function("Terminate", [](sol::optional<bool> plant_won) {
+		bool won = plant_won.value_or(false);
 		auto challenge = PVZ::GetBoard().GetChallenge();
 		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
 		challenge.AttributeCountdown = 1;
-		lua["OnTerminate"]();
+		lua["OnTerminate"](won);
 	});
 
 	struct MatchProxy {};

@@ -142,12 +142,12 @@ end
 function OnTeamEliminated(row)
     eliminated_count = eliminated_count + 1
     if eliminated_count >= 5 then
-        Terminate()
+        Terminate(false)
     end
 end
 
 -- 比赛结束回调
-function OnTerminate()
+function OnTerminate(plant_won)
     -- 输出当前阵型和坚持轮数
     if result_file then
         local line = {}

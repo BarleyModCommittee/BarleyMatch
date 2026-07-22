@@ -133,7 +133,7 @@ end
 | `OnPreMatch()` | 无 | 赛前准备阶段每帧调用 |
 | `OnMatchUpdate()` | 无 | 比赛进行时每帧调用 |
 | `OnTeamEliminated(row)` | `row`: 被淘汰的行号 | 小推车触发时调用 |
-| `OnTerminate()` | 无 | 对局结束时调用 |
+| `OnTerminate(plant_won)` | `plant_won`: 植物方是否获胜 | 对局结束时调用 |
 
 ### 导出函数
 
@@ -144,7 +144,7 @@ end
 | `CreatePlant(type, row, column)` | 植物类型、行、列 | 在指定位置创建植物 |
 | `CreateZombie(type, row, column, x)` | 僵尸类型、行、列、X坐标 | 在指定位置创建僵尸 |
 | `ClearPlants()` | 无 | 清除场上所有植物 |
-| `Terminate()` | 无 | 终止当前对局，触发 `OnTerminate()` |
+| `Terminate(plant_won)` | `plant_won`: 植物方是否获胜 | 终止当前对局，触发 `OnTerminate(plant_won)` |
 | `HasZombie()` | 无 | `bool` | 判断场上是否有僵尸 |
 
 ### Match 属性
