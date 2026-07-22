@@ -11,7 +11,10 @@ export void SetupEvents();
 void onLoadEnd()
 {
 	auto app = PVZ::GetPVZApp();
-	app.FastLoad(PVZLevel::Vasebreaker_Endless);
+	if (isIZMode)
+		app.FastLoad(PVZLevel::I_Zombie_Endless);
+	else
+		app.FastLoad(PVZLevel::Vasebreaker_Endless);
 }
 
 void onChallengeInitLevelAfter(PVZ::Challenge challenge)
@@ -80,7 +83,8 @@ void SetupEvents()
 	else
 		BoardKeyDownEvent((int)onBoardKeyDown);
 
-	VaseBreakerPopulateEvent((int)onPopulate);
+	if (!isIZMode)
+		VaseBreakerPopulateEvent((int)onPopulate);
 	LoadEndEvent((int)onLoadEnd);
 	ChallengeInitLevelAfterEvent((int)onChallengeInitLevelAfter);
 }
