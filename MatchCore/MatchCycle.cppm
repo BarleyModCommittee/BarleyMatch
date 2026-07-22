@@ -19,7 +19,8 @@ export void MatchStart()
 	challenge.LevelProcess = 1;
 	challenge.ConveyorCountdown = 1;
 
-	Creator::ResetLawnmowers();
+	if (!isIZMode)
+		Creator::ResetLawnmowers();
 	for (auto proj : board.GetAllProjectiles())
 		proj.Remove();
 	for (auto plant : board.GetAllPlants())
@@ -49,6 +50,12 @@ void UpdateInMatch()
 		challenge.LevelProcess--;
 	if (challenge.ConveyorCountdown > 0)
 		challenge.ConveyorCountdown--;
+
+	if (isIZMode && PVZ::GetBoard().ZombiesCount == 0)
+	{
+		LuaCallOnTerminate(true);
+		return;
+	}
 
 	LuaCallOnMatchUpdate();
 }
@@ -101,19 +108,31 @@ void TeamEliminated(PVZ::LawnMower mower)
 	LuaCallOnTeamEliminated(mower.Row);
 }
 
+/// @brief IZ 模式脑子被吃掉
+void IZTeamEliminated(PVZ::IZBrain brain)
+{
+	PVZ::GetBoard().GetChallenge().LevelProcess = 0;
+	LuaCallOnTeamEliminated(brain.Row);
+}
+
 export void MatchCycleInit()
 {
 	if (isPoolEnabled)
 	{
 		row_per_round = 6;
 		Const::SetLevelScene(PVZLevel::Vasebreaker_Endless, SceneType::Fog);
+		Const::SetLevelScene(PVZLevel::I_Zombie_Endless, SceneType::Fog);
 	}
 	else
 		row_per_round = 5;
+
+	if (isIZMode)
+		IZScoreBrainEvent((int)IZTeamEliminated);
+	else
+		LawnmowerStartEvent((int)TeamEliminated);
 
 	std::random_device device;
 	RndE = std::mt19937_64(device());
 
 	BoardUpdateGameEvent((int)RoundUpdate);
-	LawnmowerStartEvent((int)TeamEliminated);
 }
