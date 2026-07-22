@@ -30,6 +30,13 @@ export void LuaCallOnTeamEliminated(int row)
 {
 	lua["OnTeamEliminated"](row);
 }
+export void LuaCallOnTerminate(bool plant_won)
+{
+	auto challenge = PVZ::GetBoard().GetChallenge();
+	challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
+	challenge.AttributeCountdown = 1;
+	lua["OnTerminate"](plant_won);
+}
 
 void LuaEnvInit()
 {
@@ -63,16 +70,16 @@ void LuaEnvInit()
 			plant.Remove();
 	});
 
+	lua.set_function("CreateIZBrain", [](int row, sol::optional<int> column) {
+		return Creator::CreateIZBrain(row, column.value_or(0));
+	});
+
 	lua.set_function("HasZombie", []() {
 		return PVZ::GetBoard().ZombiesCount > 0;
 	});
 
 	lua.set_function("Terminate", [](sol::optional<bool> plant_won) {
-		bool won = plant_won.value_or(false);
-		auto challenge = PVZ::GetBoard().GetChallenge();
-		challenge.State = ChallengeState::BARLEYMATCH_AFTERMATCH;
-		challenge.AttributeCountdown = 1;
-		lua["OnTerminate"](won);
+		LuaCallOnTerminate(plant_won.value_or(false));
 	});
 
 	struct MatchProxy {};
