@@ -44,7 +44,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(SolutionDir)vcpkg_installed\x86-windows\x86-windows\include\luajit;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)vcpkg_installed\x86-windows-static\x86-windows-static\include\luajit;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
