@@ -32,7 +32,6 @@ vcpkg install
 YOUR_PVZ_DIR/
 ├── AutoTest-Setup.exe          // 测试启动软件
 ├── file.json                   // 测试配置文件
-├── lua51.dll                   // 测试内核的 Lua 依赖库
 ├── MatchCore.dll               // 测试内核
 ├── MatchConfig.lua             // 对局脚本
 └── PlantsVsZombies.exe         // PVZ 主程序
