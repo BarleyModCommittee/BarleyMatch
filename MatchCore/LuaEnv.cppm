@@ -82,6 +82,10 @@ void LuaEnvInit()
 		LuaCallOnTerminate(plant_won.value_or(false));
 	});
 
+	lua.set_function("exit", []() {
+		ExitProcess(0);
+	});
+
 	struct MatchProxy {};
 	auto ut = lua.new_usertype<MatchProxy>("Match", sol::no_constructor);
 	ut["StateCountdown"] = sol::property(
