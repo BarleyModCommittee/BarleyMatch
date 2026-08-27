@@ -10,6 +10,9 @@ using nlohmann::json;
 
 uint8_t code[] =
 {
+	0x8B, 5, 0xC0, 0x9E, 0x6A, 0,
+	0xC6, 0x80, 0x8E, 8, 0, 0, 0,
+
 	0x68, 0, 0, 0, 0,
 	0xFF, 0x15, 0xA4, 0x20, 0x65, 0,
 
@@ -56,8 +59,9 @@ int main(int argc, char* argv[])
 	if (should_distribute_script)
 		script_path = std::filesystem::path{Utf8ToWide(j.at("script").get_ref<const string&>())};
 
-	for (string str : j.at("venv"))
+	for (uint8_t idx = 0; string str : j.at("venv"))
 	{
+		idx++;
 		if (should_distribute_script && !DistributeScript(script_path, str))
 			return 1;
 
@@ -67,7 +71,8 @@ int main(int argc, char* argv[])
 		std::printf("%d\n", PVZ::Memory::Variable);
 		PVZ::Memory::immediateExecute = true;
 
-		auto pos = (int*)(code + 1);
+		*(code + 12) = idx;
+		auto pos = (int*)(code + 14);
 		*pos = PVZ::Memory::Variable;
 
 		PVZ::Memory::WriteArray(PVZ::Memory::Variable, dll_pos, sizeof(dll_pos));

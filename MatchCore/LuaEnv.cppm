@@ -138,6 +138,11 @@ void LuaEnvInit()
 			return row_per_round;
 		}
 	);
+	ut["ProcessIndex"] = sol::property(
+		[](MatchProxy&) -> int {
+			return PVZ::Memory::ReadMemory<uint8_t>(PVZ::GetPVZApp().GetBaseAddress() + 0x88E);
+		}
+	);
 	lua["Match"] = MatchProxy{};
 
 	std::string config_path = GetWorkingDirName("MatchConfig.lua");

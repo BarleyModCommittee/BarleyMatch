@@ -162,3 +162,4 @@ end
 | `Match.TertiaryCounter` | 读写 | 通用计时器 |
 | `Match.Round` | 读写 | 已完成对局数 |
 | `Match.RowsPerRound` | 只读 | 每回合行数（5或6） |
+| `Match.ProcessIndex` | 只读 | 当前进程的测试顺序编号（从1开始） |
