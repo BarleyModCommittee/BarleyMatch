@@ -31,8 +31,8 @@ local result_file = nil
 -- 生成文件名（带时间戳）
 local function generate_filename()
 	local time = os.date("*t")
-	return string.format("result_%04d%02d%02d_%02d%02d%02d.jsonl",
-		time.year, time.month, time.day, time.hour, time.min, time.sec)
+	return string.format("result_%04d%02d%02d_%02d%02d%02d-%d.jsonl",
+		time.year, time.month, time.day, time.hour, time.min, time.sec, Match.ProcessIndex)
 end
 
 -- 初始化输出文件
