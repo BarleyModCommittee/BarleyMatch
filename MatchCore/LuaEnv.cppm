@@ -59,9 +59,14 @@ void LuaEnvInit()
 		return Creator::CreatePlant(static_cast<SeedType::SeedType>(type), row, column);
 	});
 
-	lua.set_function("CreateZombie", [](int type, int row, int column, float x) {
+	lua.set_function("CreateZombie", [](int type, int row, int column, sol::variadic_args args) {
 		auto zombie = Creator::CreateZombie(static_cast<ZombieType::ZombieType>(type), row, column);
-		zombie.X = x;
+		if (args.begin() != args.end())
+		{
+			auto x = *args.begin();
+			if (x.get_type() != sol::type::lua_nil)
+				zombie.X = x.as<float>();
+		}
 		return zombie;
 	});
 
