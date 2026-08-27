@@ -1,11 +1,12 @@
+#include <windows.h>
+
 import index;
 
+import <filesystem>;
 import <fstream>;
 using std::ifstream;
 using std::string;
 using nlohmann::json;
-
-wchar_t dir[1000];
 
 uint8_t code[] =
 {
@@ -22,16 +23,45 @@ uint8_t code[] =
 
 char dll_pos[] = "../MatchCore.dll";
 
+std::wstring Utf8ToWide(const string& value)
+{
+	const int size = ::MultiByteToWideChar(CP_UTF8, 0, value.data(), static_cast<int>(value.size()), nullptr, 0);
+	std::wstring result(size, L'\0');
+	::MultiByteToWideChar(CP_UTF8, 0, value.data(), static_cast<int>(value.size()), result.data(), size);
+	return result;
+}
+
+bool DistributeScript(const std::filesystem::path& source_path, const string& venv)
+{
+	const auto output_path = std::filesystem::path{Utf8ToWide(venv)} / "MatchConfig.lua";
+	std::error_code error;
+	if (std::filesystem::equivalent(source_path, output_path, error))
+		return true;
+	error.clear();
+	if (std::filesystem::copy_file(source_path, output_path, std::filesystem::copy_options::overwrite_existing, error))
+		return true;
+
+	std::printf("Failed to copy script: %s\n", venv.c_str());
+	return false;
+}
+
 int main(int argc, char* argv[])
 {
 	std::ifstream config{"file.json"};
 	json j;
 	config >> j;
 
+	const bool should_distribute_script = j.contains("script");
+	std::filesystem::path script_path;
+	if (should_distribute_script)
+		script_path = std::filesystem::path{Utf8ToWide(j.at("script").get_ref<const string&>())};
+
 	for (string str : j.at("venv"))
 	{
-		::MultiByteToWideChar(0, 0, str.c_str(), -1, dir, str.size());
-		uint32_t pid = ProcessOpener::OpenByFilePath(dir, L"PlantsVsZombies.exe");
+		if (should_distribute_script && !DistributeScript(script_path, str))
+			return 1;
+
+		uint32_t pid = ProcessOpener::OpenByFilePath(Utf8ToWide(str).c_str(), L"PlantsVsZombies.exe");
 
 		PVZ::InitPVZNoLock(pid);
 		std::printf("%d\n", PVZ::Memory::Variable);

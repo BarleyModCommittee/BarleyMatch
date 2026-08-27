@@ -39,7 +39,7 @@ YOUR_PVZ_DIR/
 
 PVZ 主程序必须命名为 `PlantsVsZombies.exe` 。
 
-如果采用多文件夹分离方案，则 `MatchConfig.lua` 应分别放在存在 PVZ 主程序的各文件夹内，其余文件应放在上级目录：
+如果采用多文件夹分离方案，可通过 `file.json` 的 `script` 配置统一分发 `MatchConfig.lua`，无需在各游戏目录中分别维护脚本：
 
 ```
 WORK_DIR/
@@ -47,11 +47,10 @@ WORK_DIR/
 ├── file.json
 ├── lua51.dll
 ├── MatchCore.dll
+├── MatchConfig.lua
 ├── PVZ_1/
-│   ├── MatchConfig.lua
 │   └── PlantsVsZombies.exe
 ├── PVZ_2/
-│   ├── MatchConfig.lua
 │   └── PlantsVsZombies.exe
 └── ...
 ```
@@ -95,12 +94,15 @@ end
 
 ```json
 {
+    "script": "./MatchConfig.lua",
     "venv": [
         "./path/to/WORK_DIR/PVZ_1",
         "./path/to/WORK_DIR/PVZ_2"
     ]
 }
 ```
+
+`script` 支持相对路径和绝对路径。配置后，`AutoTest-Setup` 会在注入前将该脚本原样分发为每个游戏目录下的 `MatchConfig.lua`。省略 `script` 时，仍会直接使用各游戏目录中已有的 `MatchConfig.lua`。
 
 ### 4. 运行测试
 
