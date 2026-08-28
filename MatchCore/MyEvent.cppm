@@ -9,3 +9,9 @@ export class LoadEndEvent : public DLLEventTemplate<0x48E268, 7>
 public:
 	LoadEndEvent(int address) : DLLEventTemplate() { Init(address); };
 };
+
+export class TitleScreenUpdateEvent : public DLLEventTemplate<0x48DCD9, 6, REG_EBP>
+{
+public:
+	TitleScreenUpdateEvent(int address) : DLLEventTemplate() { Init(address); };
+};

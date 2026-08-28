@@ -17,6 +17,12 @@ void onLoadEnd()
 		app.FastLoad(PVZLevel::Vasebreaker_Endless);
 }
 
+void onTitleScreenUpdate(PVZ::Widget screen)
+{
+	if (PVZ::Memory::ReadMemory<bool>(screen.GetBaseAddress() + 0x0A1))
+		onLoadEnd();
+}
+
 void onChallengeInitLevelAfter(PVZ::Challenge challenge)
 {
 	auto board = PVZ::GetBoard();
@@ -86,5 +92,6 @@ void SetupEvents()
 	if (!isIZMode)
 		VaseBreakerPopulateEvent((int)onPopulate);
 	LoadEndEvent((int)onLoadEnd);
+	TitleScreenUpdateEvent((int)onTitleScreenUpdate);
 	ChallengeInitLevelAfterEvent((int)onChallengeInitLevelAfter);
 }
