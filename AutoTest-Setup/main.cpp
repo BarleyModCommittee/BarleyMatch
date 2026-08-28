@@ -68,14 +68,13 @@ int main(int argc, char* argv[])
 		uint32_t pid = ProcessOpener::OpenByFilePath(Utf8ToWide(str).c_str(), L"PlantsVsZombies.exe");
 
 		PVZ::InitPVZNoLock(pid);
-		std::printf("%d\n", PVZ::Memory::Variable);
 		PVZ::Memory::immediateExecute = true;
 
 		*(code + 12) = idx;
 		auto pos = (int*)(code + 14);
 		*pos = PVZ::Memory::Variable;
 
-		PVZ::Memory::WriteArray(PVZ::Memory::Variable, dll_pos, sizeof(dll_pos));
+		PVZ::Memory::WriteArrayUnsafe(PVZ::Memory::Variable, dll_pos, sizeof(dll_pos));
 
 		Injector inj(0x5513B5, 6, code, sizeof(code));
 
